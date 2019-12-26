@@ -28,6 +28,11 @@ def byteread(num):#will read and return the specified number of bytes
 	bytecounter+=num#after reading is done read position is incremented by the number of bytes read.
 	return bytehold#after looping is done the specified bytes are returned.
 
+def timetype(deltatimebytes):#used to determine if the time division is in ticks per beat or frames per second.
+	if str(deltatimebytes).replace("b'","").replace("'","")[0:2] == "00":
+		return True#if true the time division is in ticks per beat.
+	else:
+		return False#the time division is in frames per second.
 
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
@@ -50,10 +55,12 @@ deltatime = byteread(2)
 print("Header: "+str(header.decode("utf-8")))
 print("MThd chunk length: "+str(int(chunklength.hex(), 16)))
 print("Midi Format Type: "+str(int(formattype.hex(), 16)))
-print("Number of MTrk chunks: "+str(int(numofmtrkchunks.hex(), 16)))
+print("Number of MTrk chunks (number of tracks): "+str(int(numofmtrkchunks.hex(), 16)))
 print("Delta time: "+str(int(deltatime.hex(), 16)))
-
-
+if timetype(deltatime.hex()) == True:
+	print("Time signature is in ticks per beat")
+else:
+	print("Time signature is in frames per second")
 trach = byteread(4)
 bytesintrack = byteread(4)
 nt1 = byteread(1)
