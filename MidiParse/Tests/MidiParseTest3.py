@@ -1,8 +1,5 @@
 """
-Test #2. This test will first read over the entire file and seperate it into an array, byte by byte.
-
-Aftermath: reading byte by byte proved to be sucessful. Test #3 will focus on looping through tracks
-and assembling a list of track events and time signatures for each event.
+Test #3. Building on test #2, test #3 will loop through tracks to read and store track data in an array.
 """
 
 def openmidi(file):
@@ -40,7 +37,7 @@ def timetype(deltatimebytes):#used to determine if the time division is in ticks
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
-midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid") #array that the bytes will be stored in.
+midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\EMMYLOU_HARRIS_-_Mr_Sandman.mid") #array that the bytes will be stored in.
 
 
 #print(midibytearray)
@@ -75,7 +72,28 @@ bytesintrack = byteread(4)
 """
 next comes the track data. However it is possible for other data to be present like the song
 title or the author's name who created the midi file.
+
+In adition, how we proceed next depends on the type of midi file. In a type 0 midi there is only one MTrk
+chunk (one track), but in type one midis with multiple MTrk chunks (multiple tracks) the first MTrk chunk
+is a "global tempo track" and contains all timing related events, while subsequent tracks will contain
+note data and no timing events.
 """
+
+if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no recursion is required.
+	pass
+
+elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
+	pass
+#first read the global tempo track, then recursivly read the rest of the tracks, that is, 
+#range(0,numberofmtrkchunks-1)
+
+
+elif int(formattype.hex(), 16) == 2:#almost never used, this will be one of the last things to be done.
+	print("Sorry, type 2 midis aren't yet supported. Please try another midi file.")
+
+else:#if no type is detected, it's a bad midi file.
+	print("Couldn't determine midi type. Are you sure this is a valid midi file?")
+
 
 nt1 = byteread(1)
 timesigme = byteread(7)
