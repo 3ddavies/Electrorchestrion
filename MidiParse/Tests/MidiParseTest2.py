@@ -1,14 +1,24 @@
 """
 Test #2. This test will first read over the entire file and seperate it into an array, byte by byte.
 """
-import re
 
-def bytesplit(string):
-	return re.split(" |\n", string)
+def openmidi(file):
+	tmbr = []
+	f = open(file, "rb")#opening the midi in binary mode
+	loopfile = True
+	while loopfile == True:
+		cb = f.read(1)
+		if cb != b'':#checking if there are still bytes left to read
+			tmbr.append(cb)
+		else:
+			loopfile = False
+	return tmbr
+
 
 def hexseperate(string):
-	stringx= str(string.hex())
+	stringx = str(string.hex())
 	return ' '.join(stringx[i:i+2] for i in range(0,len(stringx),2))
+
 
 def byteread(num):#will read and return the specified number of bytes
 	global bytecounter
@@ -22,18 +32,9 @@ def byteread(num):#will read and return the specified number of bytes
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
+midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid") #array that the bytes will be stored in.
 
-f = open("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid", "rb") #opening the midi in binary mode.
 
-midibytearray = [] #array that the bytes will be stored in.
-
-loopfile = True
-while loopfile == True:
-	cb = f.read(1)
-	if cb != b'':#checking if there are still bytes left to read
-		midibytearray.append(cb)
-	else:
-		loopfile = False
 #print(midibytearray)
 #print(midibytearray[0])
 #print(type(midibytearray[0]))
