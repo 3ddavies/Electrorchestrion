@@ -52,8 +52,10 @@ def timedivision(time):
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
-midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid") #array that the bytes will be stored in.
-#midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\EMMYLOU_HARRIS_-_Mr_Sandman.mid") #array that the bytes will be stored in.
+mastertrackarray = []#this array will store all tracks in arrays. format will be [[track0size, track0], [track1size, track1], [track2size, track2]]
+
+#midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid") #array that the bytes will be stored in.
+midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\EMMYLOU_HARRIS_-_Mr_Sandman.mid") #array that the bytes will be stored in.
 
 
 #print(midibytearray)
@@ -90,8 +92,6 @@ else:
 
 #this is basically the track identifying itself and saying how long it is.
 
-trach = byteread(4)
-bytesintrack = byteread(4)
 """
 next comes the track data. However it is possible for other data to be present like the song
 title or the author's name who created the midi file.
@@ -108,6 +108,23 @@ if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no 
 
 elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
 	print("type 1")
+	
+	for i in range(0, int(numofmtrkchunks.hex(), 16)):#for each track:
+		trach = byteread(4)
+		bytesintrack = byteread(4)
+		#trackstr=str(trach.hex()+bytesintrack.hex())
+		#print(trach, int(bytesintrack.hex(), 16))
+		mastertrackarray.append([bytesintrack.hex(), byteread(int(bytesintrack.hex(), 16)).hex()])
+	
+	#trackstr=byteread(int(bytesintrack.hex(), 16)).hex()
+	
+	'''
+	for bytespresent in range(0, int(bytesintrack.hex(), 16)):
+		#trackarray.append(byteread(1).hex())
+		trackstr+=str(byteread(1).hex())
+	'''
+	print(mastertrackarray)
+	#print(byteread(4))
 
 #first read the global tempo track, then recursivly read the rest of the tracks, that is, 
 #range(0,numberofmtrkchunks-1)
