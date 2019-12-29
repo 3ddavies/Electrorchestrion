@@ -34,10 +34,26 @@ def timetype(deltatimebytes):#used to determine if the time division is in ticks
 	else:
 		return False#the time division is in frames per second.
 
+def hextobin(hexnum):
+	return bin(int(str(hexnum).replace("b'","").replace("'",""), 16))[2:].zfill(16)
+
+def timedivision(time):
+	ttp = hextobin(time)
+	#print(ttp)
+	#print(type(ttp))
+	if ttp[0] == '0':#time signature is in ticks per quarter note
+		return int(ttp[1:], 2)
+	elif ttp[0] == '1':
+		print("Parsing frames per second will be added in a future update. Please try another MIDI file.")
+		pass
+	else:
+		print("Can't determine time signature. Are you sure this is a valid MIDI file?")
+
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
-midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\EMMYLOU_HARRIS_-_Mr_Sandman.mid") #array that the bytes will be stored in.
+midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\BONEY M.Rasputin K.mid") #array that the bytes will be stored in.
+#midibytearray = openmidi("C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\EMMYLOU_HARRIS_-_Mr_Sandman.mid") #array that the bytes will be stored in.
 
 
 #print(midibytearray)
@@ -50,15 +66,22 @@ header = byteread(4)
 chunklength = byteread(4)
 formattype = byteread(2)
 numofmtrkchunks = byteread(2)
-deltatime = byteread(2)
+deltatime = byteread(2)#if no tempo is assigned, 120bpm is assumed.
+#print(deltatime.hex())
+
+print(timedivision(deltatime.hex()))
+
 
 print("Header: "+str(header.decode("utf-8")))
 print("MThd chunk length: "+str(int(chunklength.hex(), 16)))
 print("Midi Format Type: "+str(int(formattype.hex(), 16)))
 print("Number of MTrk chunks (number of tracks): "+str(int(numofmtrkchunks.hex(), 16)))
+
+
+
 print("Delta time: "+str(int(deltatime.hex(), 16)))
 if timetype(deltatime.hex()) == True:
-	print("Time signature is in ticks per beat")
+	print("Time signature is in ticks per beat (quarter note)")
 else:
 	print("Time signature is in frames per second")
 
@@ -80,10 +103,12 @@ note data and no timing events.
 """
 
 if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no recursion is required.
-	pass
+	print("type 0")#type 0 midis are also the most common type, followed by type 1.
+
 
 elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
-	pass
+	print("type 1")
+
 #first read the global tempo track, then recursivly read the rest of the tracks, that is, 
 #range(0,numberofmtrkchunks-1)
 
@@ -94,7 +119,7 @@ elif int(formattype.hex(), 16) == 2:#almost never used, this will be one of the 
 else:#if no type is detected, it's a bad midi file.
 	print("Couldn't determine midi type. Are you sure this is a valid midi file?")
 
-
+"""
 nt1 = byteread(1)
 timesigme = byteread(7)
 nt2 = byteread(1)
@@ -110,3 +135,4 @@ print("Time signature meta event: "+hexseperate(timesigme))
 print("0 ticks")
 print("Key signature meta event: "+hexseperate(keysigme))
 print("0 ticks")
+"""
