@@ -1,5 +1,7 @@
 """
 Test #3. Building on test #2, test #3 will loop through tracks to read and store track data in an array.
+
+Aftermath: Test #3 seperates tracks into an array. Test #4 will parse track data.
 """
 
 def openmidi(file):
