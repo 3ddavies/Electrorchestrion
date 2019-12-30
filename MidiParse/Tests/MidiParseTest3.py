@@ -104,7 +104,10 @@ note data and no timing events.
 
 if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no recursion is required.
 	print("type 0")#type 0 midis are also the most common type, followed by type 1.
-
+	trach = byteread(4)
+	bytesintrack = byteread(4)
+	mastertrackarray.append([bytesintrack.hex(), byteread(int(bytesintrack.hex(), 16)).hex()])
+	
 
 elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
 	print("type 1")

@@ -1,0 +1,7 @@
+f = open("test.txt", 'r')
+s= f.read()
+s = " ".join(s[i:i+16] for i in range(0, len(s), 16))
+f.close()
+g = open("p2.txt", 'w+')
+g.write(s)
+g.close()
