@@ -29,13 +29,14 @@ def byteread(num):#will read and return the specified number of bytes
 		bytehold+=midibytearray[i+bytecounter]#number of increment plus the read position
 	bytecounter+=num#after reading is done read position is incremented by the number of bytes read.
 	return bytehold#after looping is done the specified bytes are returned.
-
+'''
 def timetype(deltatimebytes):#used to determine if the time division is in ticks per beat or frames per second.
+	print(str(deltatimebytes).replace("b'","").replace("'","")[0:2])
 	if str(deltatimebytes).replace("b'","").replace("'","")[0:2] == "00":
 		return True#if true the time division is in ticks per beat.
 	else:
 		return False#the time division is in frames per second.
-
+'''
 def hextobin(hexnum):
 	return bin(int(str(hexnum).replace("b'","").replace("'",""), 16))[2:].zfill(16)
 
@@ -102,17 +103,27 @@ print(timedivision(deltatime.hex()))
 
 print("Header: "+str(header.decode("utf-8")))
 print("MThd chunk length: "+str(int(chunklength.hex(), 16)))
-print("Midi Format Type: "+str(int(formattype.hex(), 16)))
+print("MIDI Format Type: "+str(int(formattype.hex(), 16)))
 print("Number of MTrk chunks (number of tracks): "+str(int(numofmtrkchunks.hex(), 16)))
 
 
 
 print("Delta time: "+str(int(deltatime.hex(), 16)))
+
+if hextobin(deltatime.hex())[0] == '0':
+	print("Time signature is in ticks per beat (quarter note)")
+elif hextobin(deltatime.hex())[0] == '1':
+	print("Time signature is in frames per second")
+else:
+	print("Error: couldn't read the time division. Are you sure this is a valid MIDI file?")
+
+
+"""
 if timetype(deltatime.hex()) == True:
 	print("Time signature is in ticks per beat (quarter note)")
 else:
 	print("Time signature is in frames per second")
-
+"""
 
 #the below will have to be repeated for each track in a midi file.
 
@@ -159,29 +170,10 @@ elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as th
 
 
 elif int(formattype.hex(), 16) == 2:#almost never used, this will be one of the last things to be done.
-	print("Sorry, type 2 midis aren't yet supported. Please try another midi file.")
+	print("Sorry, type 2 MIDIs aren't yet supported. Please try another MIDI file.")
 
 else:#if no type is detected, it's a bad midi file.
-	print("Couldn't determine midi type. Are you sure this is a valid midi file?")
+	print("Couldn't determine MIDI type. Are you sure this is a valid MIDI file?")
 
 
 print(mastertrackarray)
-
-
-"""
-nt1 = byteread(1)
-timesigme = byteread(7)
-nt2 = byteread(1)
-keysigme = byteread(5)
-nt3 = byteread(1)
-
-print("\n----------\n")
-
-print("Track: "+str(trach.decode("utf-8")))
-print("Number of bytes in track (chunk size): "+str(int(bytesintrack.hex(), 16)))
-print("0 ticks")
-print("Time signature meta event: "+hexseperate(timesigme))
-print("0 ticks")
-print("Key signature meta event: "+hexseperate(keysigme))
-print("0 ticks")
-"""
