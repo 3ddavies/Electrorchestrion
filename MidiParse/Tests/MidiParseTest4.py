@@ -51,26 +51,36 @@ def timedivision(time):
 	else:
 		print("Can't determine time signature. Are you sure this is a valid MIDI file?")
 
+def listmid():
+	ptmf = 'C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\'
+
+	midifiles = []
+	# r=root, d=directories, f = files
+	for r, d, f in os.walk(ptmf):
+		for file in f:
+			if '.mid' in file:
+				midifiles.append(file)
+
+	print("Which MIDI file would you like to use?")
+	for i in range(0,len(midifiles)):
+		print(str(i)+" - "+str(midifiles[i]))
+
+	ktfmi = True
+	while ktfmi == True:
+		try:
+			return os.path.join(r, midifiles[int(input("->"))])
+			ktfmi = False
+		except:
+			print("Error: your input should be a number from 0 to "+str(i)+".")
+
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
 mastertrackarray = []#this array will store all tracks in arrays. format will be [[track0size, track0], [track1size, track1], [track2size, track2]]
 
 
-ptmf = 'C:\\Users\\gabep\\Desktop\\Electrorchestrion\\Midis\\'
 
-midifiles = []
-# r=root, d=directories, f = files
-for r, d, f in os.walk(ptmf):
-	for file in f:
-		if '.mid' in file:
-			midifiles.append(file)
-
-print("Which MIDI file would you like to use?")
-for i in range(0,len(midifiles)):
-	print(str(i)+" - "+str(midifiles[i]))
-
-midibytearray = openmidi(os.path.join(r, midifiles[int(input("->"))]))#array that the bytes will be stored in.
+midibytearray = openmidi(listmid())#array that the bytes will be stored in.
 
 
 
@@ -142,7 +152,6 @@ elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as th
 		#trackarray.append(byteread(1).hex())
 		trackstr+=str(byteread(1).hex())
 	'''
-	print(mastertrackarray)
 	#print(byteread(4))
 
 #first read the global tempo track, then recursivly read the rest of the tracks, that is, 
@@ -154,6 +163,10 @@ elif int(formattype.hex(), 16) == 2:#almost never used, this will be one of the 
 
 else:#if no type is detected, it's a bad midi file.
 	print("Couldn't determine midi type. Are you sure this is a valid midi file?")
+
+
+print(mastertrackarray)
+
 
 """
 nt1 = byteread(1)
