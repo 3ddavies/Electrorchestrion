@@ -155,7 +155,7 @@ elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as th
 		#trackstr=str(trach.hex()+bytesintrack.hex())
 		#print(trach, int(bytesintrack.hex(), 16))
 		mastertrackarray.append([bytesintrack.hex(), byteread(int(bytesintrack.hex(), 16)).hex()])
-	
+		#mastertrackarray.append([bytesintrack, byteread(int(bytesintrack.hex(), 16))])
 	#trackstr=byteread(int(bytesintrack.hex(), 16)).hex()
 	
 	'''
