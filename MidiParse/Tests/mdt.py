@@ -1,20 +1,4 @@
-midimeta = {
-"00":["Sequence Number", 1, 2],
-"01":["Text Event", 0, 'vlv'],
-"02":["Copyright Notice", 0, 'vlv'],
-"03":["Sequence/Track Name", 0, 'vlv'],
-"04":["Instrument Name", 0, 'vlv'],
-"05":["Lyric", 0, 'vlv'], 
-"06":["Marker", 0, 'vlv'], 
-"07":["Cue Point ", 0, 'vlv'],
-"20":["MIDI Channel Prefix", 1, 1],
-"2f":["End of Track", 1, 0],
-"51":["Set Tempo", 1, 3],
-"54":["SMPTE Offset", 1, 5],
-"58":["Time Signature", 1, 4],
-"59":["Key Signature", 1, 2],
-"7f":["Sequencer-Specific Meta-Event", 0, 'vlv']
-}
+from mididictionaries import *
 
 y = '00ff7f0d050f1c323030332e31322e303100ff7f08050f1200007f7f0000ff5103068a1a00ff58040402180800ff2f00'
 #####00ff7f0d050f1c323030332e31322e303100ff7f08050f1200007f7f0000ff5103068a1a00ff58040402180800ff2f00
@@ -65,7 +49,7 @@ while len(ta) > tapc:
 		print("f0 sysex event")
 
 	elif ta[tapc] == "f7":#indicates f7 sysex event
-		print("f0 sysex event")
+		print("f7 sysex event")
 
 	else:
 		print("stuck!", ta[tapc])

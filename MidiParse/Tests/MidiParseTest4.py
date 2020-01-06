@@ -100,7 +100,8 @@ deltatime = byteread(2)#if no tempo is assigned, 120bpm is assumed.
 
 print(timedivision(deltatime.hex()))
 
-
+print(header)
+print(type(header))
 print("Header: "+str(header.decode("utf-8")))
 print("MThd chunk length: "+str(int(chunklength.hex(), 16)))
 print("MIDI Format Type: "+str(int(formattype.hex(), 16)))
