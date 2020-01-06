@@ -18,11 +18,16 @@ midimeta = {
 
 y = '00ff7f0d050f1c323030332e31322e303100ff7f08050f1200007f7f0000ff5103068a1a00ff58040402180800ff2f00'
 #####00ff7f0d050f1c323030332e31322e303100ff7f08050f1200007f7f0000ff5103068a1a00ff58040402180800ff2f00
+#the output is an array containing arrays for each event. The final array will be several of the following:
+#[deltatime, eventID, eventname, [arbitrary bytes in hex], [bytes in hex of event.]]
 ta = [(y[i:i+2]) for i in range(0, len(y), 2)]#splits the track string into an array of bytes.
-tapc = 1#pos counter
+tapc = 0#pos counter
 trackeventsarray = []#stores all events in a track.
 while len(ta) > tapc:
 	print('tapc '+str(tapc))
+	edt = ta[tapc]#event delta time
+	tapc+=1
+	arb = []
 	if ta[tapc] == "ff":#indicates MIDI meta event
 		tapc+=1
 		rmc = ta[tapc]#this is the identifier of the meta instruction.
@@ -39,20 +44,29 @@ while len(ta) > tapc:
 
 			eventlength = int(vlvs,16)#this will tell us how many bytes the event is.
 		else:
-			tapc +=midimeta[rmc][1]#this will insure arbitrary bytes are ignored.
+			for k in range(0,midimeta[rmc][1]):
+				arb.append(ta[tapc])
+				tapc+=1
+			#tapc +=midimeta[rmc][1]#this will insure arbitrary bytes are ignored.
 			eventlength = midimeta[rmc][2]
 			
 		eventraw = []
 		for j in range(0, eventlength):
 			eventraw.append(ta[tapc])
 			tapc+=1
-		event = [rmc, midimeta[rmc][0], eventraw]
+		event = [edt, rmc, midimeta[rmc][0], arb, eventraw]
 		print(vlvs)
 		print(int(vlvs,16))
 		print(event)
 		print(len(eventraw))
-		tapc+=1#this is to avoid needlessly reading the '00' that preceeds FF.
+		#tapc+=1#this is to avoid needlessly reading the '00' that preceeds FF.
 		trackeventsarray.append(event)
+	elif ta[tapc] == "f0":#indicates f0 sysex event
+		print("f0 sysex event")
+
+	elif ta[tapc] == "f7":#indicates f7 sysex event
+		print("f0 sysex event")
+
 	else:
 		print("stuck!", ta[tapc])
 		exit()
