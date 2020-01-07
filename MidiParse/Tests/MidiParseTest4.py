@@ -3,6 +3,19 @@ Test #4. Building on test #3, test #4 will parse track data.
 
 """
 import os
+from binascii import unhexlify
+from mididictionaries import *
+import argparse
+verbpa = argparse.ArgumentParser()
+verbpa.add_argument('-v', '--verbose', action="store_true", help="enables verbose output (debug)")
+vera = verbpa.parse_args()
+if vera.verbose:
+	def verpri(stuff):
+		print(stuff)
+else:
+	def verpri(stuff):
+		pass
+
 
 def openmidi(file):
 	tmbr = []
@@ -74,11 +87,78 @@ def listmid():
 		except:
 			print("Error: your input should be a number from 0 to "+str(i)+".")
 
+
+def mparse(stringcheese):
+	ta = [(stringcheese[i:i+2]) for i in range(0, len(stringcheese), 2)]#splits the track string into an array of bytes.
+	tapc = 0#pos counter
+	trackeventsarray = []#stores all events in a track.
+	while len(ta) > tapc:
+		verpri('tapc '+str(tapc))
+		dtl = True#loop condition
+		edt = ''#event delta time
+		while dtl == True:
+			edt+=ta[tapc]
+			if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
+				dtl = False
+			tapc+=1
+		arb = []
+		if ta[tapc] == "ff":#indicates MIDI meta event
+			tapc+=1
+			rmc = ta[tapc]#this is the identifier of the meta instruction.
+			tapc+=1
+			if midimeta[rmc][2] == 'vlv':
+				verpri(True)
+				vlvl = True#loop condition
+				vlvs = ''#vlv string
+				while vlvl == True:
+					vlvs+=ta[tapc]
+					tapc+=1
+					if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
+						vlvl = False
+				verpri(vlvs)
+				verpri(int(vlvs,16))
+				eventlength = int(vlvs,16)#this will tell us how many bytes the event is.
+			else:
+				for k in range(0,midimeta[rmc][1]):
+					arb.append(ta[tapc])
+					tapc+=1
+				eventlength = midimeta[rmc][2]
+			eventraw = []
+			for j in range(0, eventlength):
+				eventraw.append(ta[tapc])
+				tapc+=1
+			event = [edt, rmc, midimeta[rmc][0], arb, eventraw]
+			if midimeta[rmc][3] == True:
+				event.append(unhexlify("".join(eventraw)).decode())
+			verpri(event)
+			verpri(len(eventraw))
+			trackeventsarray.append(event)
+		elif ta[tapc] == "f0":#indicates f0 sysex event
+			verpri("f0 sysex event")
+
+		elif ta[tapc] == "f7":#indicates f7 sysex event
+			verpri("f7 sysex event")
+
+		elif ta[tapc][0] in musicalevents:#if the event is a musical event:
+			ev= ta[tapc]#event. ev[0] will be the event name while ev[1] is the channel.
+			tapc+=1
+			verpri('Event "' + musicalevents[ev[0]][0] + '" on channel ' + str(ev[1]))
+			evdata = ta[tapc:tapc+musicalevents[ev[0]][1]]
+			tapc+=musicalevents[ev[0]][1]
+			verpri(evdata)
+			event = [edt, ev, 'Event "' + musicalevents[ev[0]][0] + '" on channel ' + str(ev[1]), [], evdata]
+			trackeventsarray.append(event)
+
+		else:
+			print("stuck!", ta[tapc])
+			exit()
+	return trackeventsarray
+
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.
 
 mastertrackarray = []#this array will store all tracks in arrays. format will be [[track0size, track0], [track1size, track1], [track2size, track2]]
-
+mastereventarray = []#[[[]]]
 
 
 midibytearray = openmidi(listmid())#array that the bytes will be stored in.
@@ -155,8 +235,11 @@ elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as th
 		bytesintrack = byteread(4)
 		#trackstr=str(trach.hex()+bytesintrack.hex())
 		#print(trach, int(bytesintrack.hex(), 16))
-		mastertrackarray.append([bytesintrack.hex(), byteread(int(bytesintrack.hex(), 16)).hex()])
+		tavern = byteread(int(bytesintrack.hex(), 16)).hex()
+		mastertrackarray.append([bytesintrack.hex(), tavern])
+		mastereventarray.append(mparse(tavern))
 		#mastertrackarray.append([bytesintrack, byteread(int(bytesintrack.hex(), 16))])
+
 	#trackstr=byteread(int(bytesintrack.hex(), 16)).hex()
 	
 	'''
@@ -178,3 +261,4 @@ else:#if no type is detected, it's a bad midi file.
 
 
 print(mastertrackarray)
+print(mastereventarray)
