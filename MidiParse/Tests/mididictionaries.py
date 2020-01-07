@@ -42,6 +42,17 @@ keysignaturesf = {
 twoscomplement = {
 	
 }
+
+def twoispretty(uwu):
+	return "1".join(bin(int(uwu,16))[2:].replace("0", "e").replace("1","0").replace("e", "1").rsplit("0", 1))	
+#return rreplace(bin(int(uwu,16))[2:].replace("0", "e").replace("1","0").replace("e", "1"))
+
+
+"""
+def rreplace(s):
+	li = s.rsplit("0", 1)
+	return "1".join(li)
+"""
 """
 ,
 "f":["(non-musical commands)", ]
