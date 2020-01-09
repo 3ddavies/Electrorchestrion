@@ -96,6 +96,8 @@ def mparse(stringcheese):
 	ta = [(stringcheese[i:i+2]) for i in range(0, len(stringcheese), 2)]#splits the track string into an array of bytes.
 	tapc = 0#pos counter
 	trackeventsarray = []#stores all events in a track.
+
+
 	while len(ta) > tapc:
 		verpri('tapc '+str(tapc))
 		dtl = True#loop condition
@@ -139,11 +141,7 @@ def mparse(stringcheese):
 			verpri(event)
 			verpri(len(eventraw))
 			trackeventsarray.append(event)
-		elif ta[tapc] == "f0":#indicates f0 sysex event
-			verpri("f0 sysex event")
 
-		elif ta[tapc] == "f7":#indicates f7 sysex event
-			verpri("f7 sysex event")
 
 		elif ta[tapc][0] in musicalevents:#if the event is a musical event:
 			ev= ta[tapc]#event. ev[0] will be the event name while ev[1] is the channel.
@@ -154,6 +152,29 @@ def mparse(stringcheese):
 			verpri(evdata)
 			event = [edt, ev, 'Event "' + musicalevents[ev[0]][0] + '" on channel ' + str(ev[1]), [], evdata]
 			trackeventsarray.append(event)
+
+		elif ta[tapc] == "f0" or "f7":#indicates Sysex event
+			rmc = ta[tapc]#this is the identifier of the meta instruction.
+			tapc+=1
+			vlvla = True#loop condition
+			vlvsa = ''#vlv string
+			while vlvla == True:
+				vlvsa+=ta[tapc]
+				tapc+=1
+				if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
+					vlvla = False
+				print(vlvsa)
+				print(int(vlvsa,16))
+				eventlength = int(vlvsa,16)#this will tell us how many bytes the event is.
+			eventraw = []
+			for fj in range(0, eventlength):
+				eventraw.append(ta[tapc])
+				tapc+=1
+			event = [edt, rmc, "Sysex Event", [], eventraw]
+			print(event)
+			print(len(eventraw))
+			trackeventsarray.append(event)
+
 
 		else:
 			print("stuck!", ta[tapc])
@@ -230,8 +251,9 @@ if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no 
 	print("type 0")#type 0 midis are also the most common type, followed by type 1.
 	trach = byteread(4)
 	bytesintrack = byteread(4)
-	mastertrackarray.append([bytesintrack.hex(), byteread(int(bytesintrack.hex(), 16)).hex()])
-	
+	alcool = byteread(int(bytesintrack.hex(), 16)).hex()
+	mastertrackarray.append([bytesintrack.hex(), alcool])
+	mastereventarray.append(mparse(alcool))
 
 elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
 	print("type 1")
