@@ -17,6 +17,10 @@ else:
 		pass
 
 
+def keysig(keybyte):
+	return twoscomplement[int(keybyte, 16)]
+
+
 def openmidi(file):
 	tmbr = []
 	f = open(file, "rb")#opening the midi in binary mode
@@ -128,8 +132,10 @@ def mparse(stringcheese):
 				eventraw.append(ta[tapc])
 				tapc+=1
 			event = [edt, rmc, midimeta[rmc][0], arb, eventraw]
-			if midimeta[rmc][3] == True:
+			if midimeta[rmc][3] == True:#if the event is a text event, append a string with the decoded ASCII to the array.
 				event.append(unhexlify("".join(eventraw)).decode())
+			elif rmc == "59":#if the event is a keysig event
+				event.append(keysig(eventraw[0]))
 			verpri(event)
 			verpri(len(eventraw))
 			trackeventsarray.append(event)

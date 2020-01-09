@@ -36,18 +36,50 @@ musicalevents = {
 "e":["Pitch Bend", 2]
 }
 #ff59 0203 00
-keysignaturesf = {
-""
-}
+
 twoscomplement = {
-	
+249:-7,
+250:-6,
+251:-5,
+252:-4,
+253:-3,
+254:-2,
+255:-1,
+0:0,
+1:1,
+2:2,
+3:3,
+4:4,
+5:5,
+6:6,
+7:7
 }
 
+def keysig(keybyte):
+	return twoscomplement[int(keybyte, 16)]
+
+"""
+
+"-7":["249", "f9", "11111001"],
+"-6":["250", "fa", "11111010"],
+"-5":["251", "fb", "11111011"],
+"-4":["252", "fc", "11111100"],
+"-3":["253", "fd", "11111101"],
+"-2":["254", "fe", "11111110"],
+"-1":["255", "ff", "11111111"],
+
+
+"""
+"""
 def twoispretty(uwu):
 	return "1".join(bin(int(uwu,16))[2:].replace("0", "e").replace("1","0").replace("e", "1").rsplit("0", 1))	
+"""
 #return rreplace(bin(int(uwu,16))[2:].replace("0", "e").replace("1","0").replace("e", "1"))
 
-
+"""
+def twoc(num):
+	return struct.unpack("b", bytes([int(num, 16)]))[0]
+"""
 """
 def rreplace(s):
 	li = s.rsplit("0", 1)
