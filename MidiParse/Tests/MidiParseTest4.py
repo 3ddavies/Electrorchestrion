@@ -266,5 +266,5 @@ else:#if no type is detected, it's a bad midi file.
 	print("Couldn't determine MIDI type. Are you sure this is a valid MIDI file?")
 
 
-print(mastertrackarray)
+#print(mastertrackarray)
 print(mastereventarray)
