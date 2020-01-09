@@ -55,8 +55,6 @@ twoscomplement = {
 7:7
 }
 
-def keysig(keybyte):
-	return twoscomplement[int(keybyte, 16)]
 
 """
 
