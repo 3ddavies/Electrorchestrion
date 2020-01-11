@@ -107,10 +107,12 @@ def mparse(stringcheese):
 			if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
 				dtl = False
 			tapc+=1
+			print("edt ", edt)
 		arb = []
 		if ta[tapc] == "ff":#indicates MIDI meta event
 			tapc+=1
 			rmc = ta[tapc]#this is the identifier of the meta instruction.
+			print("RMC: "+str(rmc))
 			tapc+=1
 			if midimeta[rmc][2] == 'vlv':
 				verpri(True)
@@ -144,16 +146,16 @@ def mparse(stringcheese):
 
 
 		elif ta[tapc][0] in musicalevents:#if the event is a musical event:
-			ev= ta[tapc]#event. ev[0] will be the event name while ev[1] is the channel.
+			rmc= ta[tapc]#event. rmc[0] will be the event name while rmc[1] is the channel.
 			tapc+=1
-			verpri('Event "' + musicalevents[ev[0]][0] + '" on channel ' + str(ev[1]))
-			evdata = ta[tapc:tapc+musicalevents[ev[0]][1]]
-			tapc+=musicalevents[ev[0]][1]
-			verpri(evdata)
-			event = [edt, ev, 'Event "' + musicalevents[ev[0]][0] + '" on channel ' + str(ev[1]), [], evdata]
+			verpri('Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]))
+			evdata = ta[tapc:tapc+musicalevents[rmc[0]][1]]
+			tapc+=musicalevents[rmc[0]][1]
+			event = [edt, rmc, 'Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]), [], evdata]
+			verpri(event)
 			trackeventsarray.append(event)
 
-		elif ta[tapc] == "f0" or "f7":#indicates Sysex event
+		elif ta[tapc] in ["f0", "f7"]:#indicates Sysex event
 			rmc = ta[tapc]#this is the identifier of the meta instruction.
 			tapc+=1
 			vlvla = True#loop condition
@@ -165,7 +167,7 @@ def mparse(stringcheese):
 					vlvla = False
 				print(vlvsa)
 				print(int(vlvsa,16))
-				eventlength = int(vlvsa,16)#this will tell us how many bytes the event is.
+			eventlength = int(vlvsa,16)#this will tell us how many bytes the event is.
 			eventraw = []
 			for fj in range(0, eventlength):
 				eventraw.append(ta[tapc])
@@ -174,12 +176,71 @@ def mparse(stringcheese):
 			print(event)
 			print(len(eventraw))
 			trackeventsarray.append(event)
+			#tapc+=1
 
 
-		else:
-			print("stuck!", ta[tapc])
-			exit()
+
+
+
+		else:#if there is no event code, we can assume that it is the same as the previous event's code.
+			if rmc in midimeta:
+				if midimeta[rmc][2] == 'vlv':
+					verpri(True)
+					vlvl = True#loop condition
+					vlvs = ''#vlv string
+					while vlvl == True:
+						vlvs+=ta[tapc]
+						tapc+=1
+						if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
+							vlvl = False
+					verpri(vlvs)
+					print("event length", int(vlvs,16))
+					print("event length", vlvs)
+					eventlength = int(vlvs,16)#this will tell us how many bytes the event is.
+				else:
+					for lll in range(0,midimeta[rmc][1]):
+						arb.append(ta[tapc])
+						tapc+=1
+					eventlength = midimeta[rmc][2]
+				eventraw = []
+				for jjj in range(0, eventlength):
+					eventraw.append(ta[tapc])
+					tapc+=1
+				event = [edt, rmc, midimeta[rmc][0], arb, eventraw]
+				if midimeta[rmc][3] == True:#if the event is a text event, append a string with the decoded ASCII to the array.
+					try:
+						event.append(unhexlify("".join(eventraw)).decode())
+					except:
+						#print(eventraw)
+						print(event)
+						exit()
+				elif rmc == "59":#if the event is a keysig event
+					event.append(keysig(eventraw[0]))
+				verpri(event)
+				verpri(len(eventraw))
+				trackeventsarray.append(event)
+				verpri("SPECIAL EVENT")
+				#exit()
+
+			elif rmc[0] in musicalevents:
+				verpri('Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]))
+				evdata = ta[tapc:tapc+musicalevents[rmc[0]][1]]
+				tapc+=musicalevents[rmc[0]][1]
+				event = [edt, rmc, 'Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]), [], evdata]
+				verpri(event)
+				trackeventsarray.append(event)
+				verpri("SPECIAL EVENT")
+				#exit()
+
+			else:
+				print("stuck!", ta[tapc])
+				print("EDT ", edt)
+				print(rmc)
+				#exit()
 	return trackeventsarray
+
+
+
 
 global bytecounter
 bytecounter = 0 #keeps track of what position in the file is being read.

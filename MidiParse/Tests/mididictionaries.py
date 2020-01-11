@@ -57,6 +57,145 @@ twoscomplement = {
 7:7
 }
 
+"""
+MIDI Control Table
+2nd byte	Function				3rd byte
+0x00	Continuous controller #0	0-127, MSB
+0x01	Modulation wheel			0-127, MSB
+0x02	Breath control				0-127, MSB
+0x03	Continuous controller #3	0-127, MSB
+0x04	Foot controller				0-127, MSB
+0x05	Portamento time				0-127, MSB
+0x06	Data Entry					0-127, MSB
+0x07	Main Volume					0-127, MSB
+0x08	Continuous controller #8	0-127, MSB
+0x09	Continuous controller #9	0-127, MSB
+0x0A	Continuous controller #10	0-127, MSB
+0x0B	Continuous controller #11	0-127, MSB
+0x0C	Continuous controller #12	0-127, MSB
+0x0D	Continuous controller #13	0-127, MSB
+0x0E	Continuous controller #14	0-127, MSB
+0x0F	Continuous controller #15	0-127, MSB
+0x10	Continuous controller #16	0-127, MSB
+0x11	Continuous controller #17	0-127, MSB
+0x12	Continuous controller #18	0-127, MSB
+0x13	Continuous controller #19	0-127, MSB
+0x14	Continuous controller #20	0-127, MSB
+0x15	Continuous controller #21	0-127, MSB
+0x16	Continuous controller #22	0-127, MSB
+0x17	Continuous controller #23	0-127, MSB
+0x18	Continuous controller #24	0-127, MSB
+0x19	Continuous controller #25	0-127, MSB
+0x1A	Continuous controller #26	0-127, MSB
+0x1B	Continuous controller #27	0-127, MSB
+0x1C	Continuous controller #28	0-127, MSB
+0x1D	Continuous controller #29	0-127, MSB
+0x1E	Continuous controller #30	0-127, MSB
+0x1F	Continuous controller #31	0-127, MSB
+0x20	Continuous controller #0	0-127, LSB
+0x21	Modulation wheel			0-127, LSB
+0x22	Breath control				0-127, LSB
+0x23	Continuous controller #3	0-127, LSB
+0x24	Foot controller				0-127, LSB
+0x25	Portamento time				0-127, LSB
+0x26	Data entry					0-127, LSB
+0x27	Main volume					0-127, LSB
+0x28	Continuous controller #8	0-127, LSB
+0x29	Continuous controller #9	0-127, LSB
+0x2A	Continuous controller #10	0-127, LSB
+0x2B	Continuous controller #11	0-127, LSB
+0x2C	Continuous controller #12	0-127, LSB
+0x2D	Continuous controller #13	0-127, LSB
+0x2E	Continuous controller #14	0-127, LSB
+0x2F	Continuous controller #15	0-127, LSB
+0x30	Continuous controller #16	0-127, LSB
+0x31	Continuous controller #17	0-127, LSB
+0x32	Continuous controller #18	0-127, LSB
+0x33	Continuous controller #19	0-127, LSB
+0x34	Continuous controller #20	0-127, LSB
+0x35	Continuous controller #21	0-127, LSB
+0x36	Continuous controller #22	0-127, LSB
+0x37	Continuous controller #23	0-127, LSB
+0x38	Continuous controller #24	0-127, LSB
+0x39	Continuous controller #25	0-127, LSB
+0x3A	Continuous controller #26	0-127, LSB
+0x3B	Continuous controller #27	0-127, LSB
+0x3C	Continuous controller #28	0-127, LSB
+0x3D	Continuous controller #29	0-127, LSB
+0x3E	Continuous controller #30	0-127, LSB
+0x3F	Continuous controller #31	0-127, LSB
+0x40	Damper pedal on/off (Sustain)	0=off, 127=on
+0x41	Portamento on/off			0=off, 127=on
+0x42	Sustenuto on/off			0=off, 127=on
+0x43	Soft pedal on/off			0=off, 127=on
+0x44	Undefined on/off			0=off, 127=on
+0x45	Undefined on/off			0=off, 127=on
+0x46	Undefined on/off			0=off, 127=on
+0x47	Undefined on/off			0=off, 127=on
+0x48	Undefined on/off			0=off, 127=on
+0x49	Undefined on/off			0=off, 127=on
+0x4A	Undefined on/off			0=off, 127=on
+0x4B	Undefined on/off			0=off, 127=on
+0x4C	Undefined on/off			0=off, 127=on
+0x4D	Undefined on/off			0=off, 127=on
+0x4E	Undefined on/off			0=off, 127=on
+0x4F	Undefined on/off			0=off, 127=on
+0x50	Undefined on/off			0=off, 127=on
+0x51	Undefined on/off			0=off, 127=on
+0x52	Undefined on/off			0=off, 127=on
+0x53	Undefined on/off			0=off, 127=on
+0x54	Undefined on/off			0=off, 127=on
+0x55	Undefined on/off			0=off, 127=on
+0x56	Undefined on/off			0=off, 127=on
+0x57	Undefined on/off			0=off, 127=on
+0x58	Undefined on/off			0=off, 127=on
+0x59	Undefined on/off			0=off, 127=on
+0x5A	Undefined on/off			0=off, 127=on
+0x5B	Undefined on/off			0=off, 127=on
+0x5C	Undefined on/off			0=off, 127=on
+0x5D	Undefined on/off			0=off, 127=on
+0x5E	Undefined on/off			0=off, 127=on
+0x5F	Undefined on/off			0=off, 127=on
+0x60	Data entry +1					127
+0x61	Data entry -1					127
+0x62	Undefined	-
+0x63	Undefined	-
+0x64	Undefined	-
+0x65	Undefined	-
+0x66	Undefined	-
+0x67	Undefined	-
+0x67	Undefined	-
+0x67	Undefined	-
+0x67	Undefined	-
+0x67	Undefined	-
+0x68	Undefined	-
+0x69	Undefined	-
+0x6A	Undefined	-
+0x6B	Undefined	-
+0x6C	Undefined	-
+0x6D	Undefined	-
+0x6E	Undefined	-
+0x6F	Undefined	-
+0x70	Undefined	-
+0x71	Undefined	-
+0x72	Undefined	-
+0x73	Undefined	-
+0x74	Undefined	-
+0x75	Undefined	-
+0x76	Undefined	-
+0x77	Undefined	-
+0x78	Undefined	-
+0x79	Undefined	-
+0x7A	Local control on/off	0=off 127=on
+0x7B	All notes off	0
+0x7C	Omni mode off (includes all notes off)	0
+0x7D	Omni mode on (includes all notes off)	0
+0x7E	Poly mode on/off(includes all notes off)	**
+0x7F	Poly mode on(incl mono=off&all notes off)	0
+**Note:
+This equals the number of channels, or zero if the number of channels equals the number of voices in the receiver.
+
+"""
 
 """
 
