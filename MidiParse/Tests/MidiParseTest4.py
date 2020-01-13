@@ -107,12 +107,12 @@ def mparse(stringcheese):
 			if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
 				dtl = False
 			tapc+=1
-			print("edt ", edt)
+			verpri("edt " +str(edt))
 		arb = []
 		if ta[tapc] == "ff":#indicates MIDI meta event
 			tapc+=1
 			rmc = ta[tapc]#this is the identifier of the meta instruction.
-			print("RMC: "+str(rmc))
+			verpri("RMC: "+str(rmc))
 			tapc+=1
 			if midimeta[rmc][2] == 'vlv':
 				verpri(True)
@@ -165,16 +165,16 @@ def mparse(stringcheese):
 				tapc+=1
 				if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
 					vlvla = False
-				print(vlvsa)
-				print(int(vlvsa,16))
+				verpri(vlvsa)
+				verpri(int(vlvsa,16))
 			eventlength = int(vlvsa,16)#this will tell us how many bytes the event is.
 			eventraw = []
 			for fj in range(0, eventlength):
 				eventraw.append(ta[tapc])
 				tapc+=1
 			event = [edt, rmc, "Sysex Event", [], eventraw]
-			print(event)
-			print(len(eventraw))
+			verpri(event)
+			verpri(len(eventraw))
 			trackeventsarray.append(event)
 			#tapc+=1
 
@@ -194,8 +194,8 @@ def mparse(stringcheese):
 						if int(ta[tapc], 16) < 128:#indicates that next value will not be  part of the vlv
 							vlvl = False
 					verpri(vlvs)
-					print("event length", int(vlvs,16))
-					print("event length", vlvs)
+					verpri("event length", int(vlvs,16))
+					verpri("event length", vlvs)
 					eventlength = int(vlvs,16)#this will tell us how many bytes the event is.
 				else:
 					for lll in range(0,midimeta[rmc][1]):
@@ -211,8 +211,8 @@ def mparse(stringcheese):
 					try:
 						event.append(unhexlify("".join(eventraw)).decode())
 					except:
-						#print(eventraw)
-						print(event)
+						#verpri(eventraw)
+						verpri(event)
 						exit()
 				elif rmc == "59":#if the event is a keysig event
 					event.append(keysig(eventraw[0]))
