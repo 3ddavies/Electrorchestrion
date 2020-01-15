@@ -16,6 +16,20 @@ else:
 	def verpri(stuff):
 		pass
 
+def cleanarray(gross):
+	for i in range(0, gross.count('')):
+		gross.remove('')
+	return gross
+
+
+def fixtracknames(broken):
+	fixed = []
+	for tracktitle in tracknames:
+			for instrument in insdict:
+				if instrument in tnu:
+					fixed.append(instrument)
+	return fixed
+
 
 def keysig(keybyte):
 	return twoscomplement[int(keybyte, 16)]
@@ -96,7 +110,8 @@ def mparse(stringcheese):
 	ta = [(stringcheese[i:i+2]) for i in range(0, len(stringcheese), 2)]#splits the track string into an array of bytes.
 	tapc = 0#pos counter
 	trackeventsarray = []#stores all events in a track.
-
+	trackins=''
+	tchn = ''
 
 	while len(ta) > tapc:
 		verpri('tapc '+str(tapc))
@@ -140,20 +155,38 @@ def mparse(stringcheese):
 				event.append(unhexlify("".join(eventraw)).decode())
 			elif rmc == "59":#if the event is a keysig event
 				event.append(keysig(eventraw[0]))
+
+			"""
+			if rmc == "03":
+				print("03 gabe ", event)
+				trackins = event[len(event)-1]
+			"""
+			if rmc == "03":
+				print("03 gabe ", event)
+				tchn = event[len(event)-1]
+			
+			"""
+			if rmc == "04":
+				print("04 gabe ", event)
+				tchn = event[len(event)-1]
+			"""
+
 			verpri(event)
 			verpri(len(eventraw))
 			trackeventsarray.append(event)
 
-
 		elif ta[tapc][0] in musicalevents:#if the event is a musical event:
 			rmc= ta[tapc]#event. rmc[0] will be the event name while rmc[1] is the channel.
 			tapc+=1
+			verpri("RMC: "+str(rmc))
 			verpri('Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]))
 			evdata = ta[tapc:tapc+musicalevents[rmc[0]][1]]
 			tapc+=musicalevents[rmc[0]][1]
 			event = [edt, rmc, 'Event "' + musicalevents[rmc[0]][0] + '" on channel ' + str(rmc[1]), [], evdata]
 			verpri(event)
 			trackeventsarray.append(event)
+			if rmc[0] == "c":#patch change
+					trackins = [str(int(event[len(event)-1][0], 16)), midiprogs[str(int(event[len(event)-1][0], 16))],  str(rmc[1])]
 
 		elif ta[tapc] in ["f0", "f7"]:#indicates Sysex event
 			rmc = ta[tapc]#this is the identifier of the meta instruction.
@@ -231,13 +264,17 @@ def mparse(stringcheese):
 				trackeventsarray.append(event)
 				verpri("SPECIAL EVENT")
 				#exit()
+				if rmc[0] == "c":#patch change
+					trackins = midiprogs[str(int(event[len(event)-1][0], 16))]
+
 
 			else:
 				print("stuck!", ta[tapc])
 				print("EDT ", edt)
 				print(rmc)
 				#exit()
-	return trackeventsarray
+
+	return trackeventsarray, trackins, tchn
 
 
 
@@ -247,8 +284,8 @@ bytecounter = 0 #keeps track of what position in the file is being read.
 
 mastertrackarray = []#this array will store all tracks in arrays. format will be [[track0size, track0], [track1size, track1], [track2size, track2]]
 mastereventarray = []#[[[]]]
-
-
+cir = []#[[],[],[]]
+tir = []
 midibytearray = openmidi(listmid())#array that the bytes will be stored in.
 
 
@@ -314,7 +351,10 @@ if int(formattype.hex(), 16) == 0:#type 0 midis only have one MTrk chunk, so no 
 	bytesintrack = byteread(4)
 	alcool = byteread(int(bytesintrack.hex(), 16)).hex()
 	mastertrackarray.append([bytesintrack.hex(), alcool])
-	mastereventarray.append(mparse(alcool))
+	mpr = mparse(alcool)
+	mastereventarray.append(mpr[0])
+	cir.append(mpr[1])
+	tir.append(mpr[2])
 
 elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as the "global tempo track".
 	print("type 1")
@@ -326,7 +366,10 @@ elif int(formattype.hex(), 16) == 1:#type 1 midis use the first MTrk chunk as th
 		#print(trach, int(bytesintrack.hex(), 16))
 		tavern = byteread(int(bytesintrack.hex(), 16)).hex()
 		mastertrackarray.append([bytesintrack.hex(), tavern])
-		mastereventarray.append(mparse(tavern))
+		mpr = mparse(tavern)
+		mastereventarray.append(mpr[0])
+		cir.append(mpr[1])
+		tir.append(mpr[2])
 		#mastertrackarray.append([bytesintrack, byteread(int(bytesintrack.hex(), 16))])
 
 	#trackstr=byteread(int(bytesintrack.hex(), 16)).hex()
@@ -349,5 +392,19 @@ else:#if no type is detected, it's a bad midi file.
 	print("Couldn't determine MIDI type. Are you sure this is a valid MIDI file?")
 
 
+print(cir)
+cir = cleanarray(cir)
+tir = cleanarray(tir)
 #print(mastertrackarray)
 print(mastereventarray)
+print(cir)
+print(tir)
+
+
+"""
+atn = ''
+for tracktitle in tracknames:
+	for instrument in insdict:
+		if instrument in tracktitle:
+			atn = instrument
+"""
