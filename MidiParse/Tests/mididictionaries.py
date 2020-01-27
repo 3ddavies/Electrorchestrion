@@ -186,7 +186,7 @@ midiprogs = {
 "124": "Telephone Ring",
 "125": "Helicopter",
 "126": "Applause",
-"127": "Gunshot",
+"127": "Gunshot"
 }
 
 """

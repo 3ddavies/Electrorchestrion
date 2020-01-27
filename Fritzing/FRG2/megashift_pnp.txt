@@ -1,0 +1,77 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=megashift
+*Date=22:22:35
+*CreatedBy=Fritzing 0.8.7b.01.24.1bf5
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;DIP16 [THT];59.9753;-12.1569;-90;Bottom;Register 12
+2;;;153.314;-59.9253;0;Bottom;Via16
+3;;;17.9831;-100.159;0;Bottom;Via19
+4;;;26.6663;-68.3494;0;Bottom;TXT1
+5;;;145.39;-52.6101;0;Bottom;Via11
+6;;;37.4903;-11.1573;0;Bottom;Via37
+7;;DIP16 [THT];105.695;-98.5169;90;Bottom;Register 5
+8;;DIP16 [THT];128.555;-12.1569;-90;Bottom;Register 15
+9;;;97.8407;-10.5477;0;Bottom;Via30
+10;;DIP16 [THT];82.8353;-12.1569;-90;Bottom;Register 13
+11;;;160.63;-55.0485;0;Bottom;Via32
+12;;;166.726;-58.0965;0;Bottom;Via20
+13;;;14.3255;-100.159;0;Bottom;Via36
+14;;DIP16 [THT];174.275;-12.1569;-90;Bottom;Register 17
+15;;DIP16 [THT];151.415;-98.5169;90;Bottom;Register 7
+16;;;153.314;-69.6789;0;Bottom;Via38
+17;;;160.63;-37.3701;0;Bottom;Via5
+18;;DIP16 [THT];105.695;-12.1569;-90;Bottom;Register 14
+19;;;56.9975;-75.7749;0;Bottom;Via26
+20;;;117.958;-14.2053;0;Bottom;Via3
+21;;;27.5875;-61.3626;0;Bottom;TXT3
+22;;;114.91;-97.7206;0;Bottom;Via18
+23;;;165.506;-77.6037;0;Bottom;Via10
+24;;DIP16 [THT];82.8353;-98.5169;90;Bottom;Register 4
+25;;;160.02;-78.2133;0;Bottom;Via6
+26;;DIP16 [THT];59.9753;-98.5169;90;Bottom;Register 3
+27;;;69.1895;-98.3302;0;Bottom;Via27
+28;;DIP16 [THT];197.135;-98.5169;90;Bottom;Register 9
+29;;DIP16 [THT];37.1153;-12.1569;-90;Bottom;Register 11
+30;;;133.198;-92.2342;0;Bottom;Via40
+31;;;174.041;-85.5285;0;Bottom;Via17
+32;;;155.143;-76.3845;0;Bottom;Via1
+33;;;163.068;-78.2133;0;Bottom;Via9
+34;;DIP16 [THT];14.2553;-98.5169;90;Bottom;Register 1
+35;;;113.081;-12.3765;0;Bottom;Via29
+36;;DIP16 [THT];14.2553;-12.1569;-90;Bottom;Register 10
+37;;;83.8199;-10.5477;0;Bottom;Via31
+38;;;51.5111;-29.4453;0;Bottom;Via34
+39;;;172.212;-84.3093;0;Bottom;Via15
+40;;DIP16 [THT];197.135;-12.1569;-90;Bottom;Register 18
+41;;;77.7239;-74.5557;0;Bottom;Via13
+42;;DIP16 [THT];128.555;-98.5169;90;Bottom;Register 6
+43;;;170.993;-72.7269;0;Bottom;Via39
+44;;;175.26;-20.3013;0;Bottom;Via2
+45;;;185.014;-104.426;0;Bottom;Via28
+46;;;26.5175;-98.9398;0;Bottom;Via35
+47;;;77.1143;-84.3093;0;Bottom;Via25
+48;;;170.383;-77.6037;0;Bottom;Via21
+49;;;64.9223;-13.5957;0;Bottom;Via33
+50;;;163.678;-61.1445;0;Bottom;Via14
+51;;DIP16 [THT];174.275;-98.5169;90;Bottom;Register 8
+52;;;143.561;-72.7269;0;Bottom;Via8
+53;;;167.335;-21.5205;0;Bottom;Via4
+54;;DIP16 [THT];37.1153;-98.5169;90;Bottom;Register 2
+55;;;138.074;-70.2885;0;Bottom;Via23
+56;;;145.39;-86.7478;0;Bottom;Via22
+57;;;130.759;-20.9109;0;Bottom;Via12
+58;;DIP16 [THT];151.415;-12.1569;-90;Bottom;Register 16
+59;;;104.468;-55.3369;0;Bottom;Arduino Mega 2560 (Rev 3)
+60;;;71.0183;-81.2613;0;Bottom;Via7
+61;;;27.2188;-65.0655;0;Bottom;TXT2
+62;;;93.5735;-14.2053;0;Bottom;Via24

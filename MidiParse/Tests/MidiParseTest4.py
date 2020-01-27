@@ -395,10 +395,14 @@ else:#if no type is detected, it's a bad midi file.
 print(cir)
 cir = cleanarray(cir)
 tir = cleanarray(tir)
+ntir = []
+for jkjkjk in tir:
+	ntir.append(jkjkjk.strip())
+
 #print(mastertrackarray)
 print(mastereventarray)
 print(cir)
-print(tir)
+print(ntir)
 
 
 """
