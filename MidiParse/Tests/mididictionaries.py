@@ -17,6 +17,7 @@ midimeta = {
 "59":["Key Signature", 1, 2, False],
 "7f":["Sequencer-Specific Meta-Event", 0, 'vlv', False]
 }
+#"ID":["Name", ?, eventlength, ?]
 """
 Command	Meaning				# parameters	param 1			param 2
 0x80	Note-off				2			key				velocity

@@ -107,7 +107,7 @@ def mparse(stringcheese):
 	trackins=[]#instruments
 	tchn = ''
 
-	while len(ta) > tapc:
+	while len(ta) > tapc:#while there are still bytes to read
 		verpri('tapc '+str(tapc))
 		dtl = True#loop condition
 		edt = ''#event delta time
@@ -256,7 +256,8 @@ def mparse(stringcheese):
 				print("EDT ", edt)
 				print(rmc)
 				#exit()
-
+	print("TAPC ", tapc)
+	print("TAL",len(ta))
 	return trackeventsarray, trackins, tchn
 
 
@@ -352,15 +353,21 @@ elif int(formattype.hex(), 16) == 2:#almost never used, this will be one of the 
 else:#if no type is detected, it's a bad midi file.
 	print("Couldn't determine MIDI type. Are you sure this is a valid MIDI file?")
 
-
+#print(int(numofmtrkchunks.hex(), 16))
+#exit()
 print(ChannelEventArray)
 ChannelEventArray = cleanarray(ChannelEventArray)
 TrackArray = cleanarray(TrackArray)
 NewTrackArray = []
 for jkjkjk in TrackArray:
 	NewTrackArray.append(jkjkjk.strip())
-
-
+"""
+print("MasterEventArray:")
 print(mastereventarray)
+print("ChannelEventArray:")
 print(ChannelEventArray)
+print("NewTrackArray:")
 print(NewTrackArray)
+print("TrackArray:")
+print(TrackArray)
+"""
